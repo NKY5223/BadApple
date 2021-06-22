@@ -1,33 +1,35 @@
+let badAppleVideo;
+let stopBadApple = false;
 function bad_apple(pixelSize = 5, blockSize = 5) {
     const blocks = parsedMap.block0 = [];
 
-    const video = document.createElement("video");
-    video.src = "badapple.mp4";
-    video.controls = true;
-    video.crossOrigin = "Anonymous";
+    badAppleVideo = document.createElement("video");
+    badAppleVideo.src = "badapple.mp4";
+    badAppleVideo.controls = true;
+    badAppleVideo.crossOrigin = "Anonymous";
 
     // Styling
-    video.style.position = "absolute";
-    video.style.display = "block";
-    video.style.top = "0px";
-    video.style.left = "0px";
-    video.style.outline = "none";
+    badAppleVideo.style.position = "absolute";
+    badAppleVideo.style.display = "block";
+    badAppleVideo.style.top = "0px";
+    badAppleVideo.style.left = "0px";
+    badAppleVideo.style.outline = "none";
 
 
-    document.body.appendChild(video);
+    document.body.appendChild(badAppleVideo);
 
     camScale = 2;
 
     document.getElementById("UI").style.opacity = 0.5;
 
-    const vidCanvas = document.createElement("canvas");
+    vidCanvas = document.createElement("canvas");
     const vidCtx = vidCanvas.getContext("2d");
 
-    video.addEventListener("loadeddata", () => {
+    badAppleVideo.addEventListener("loadeddata", () => {
         console.log("Video loaded");
 
-        const width = video.videoWidth;
-        const height = video.videoHeight;
+        const width = badAppleVideo.videoWidth;
+        const height = badAppleVideo.videoHeight;
 
         vidCanvas.width = width;
         vidCanvas.height = height;
@@ -53,8 +55,9 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
             }
         }
 
-        window.requestAnimationFrame(function run() {
-            vidCtx.drawImage(video, 0, 0, width, height);
+        window.requestAnimationFrame(function badAppleRun() {
+            if (stopBadApple) return;
+            vidCtx.drawImage(badAppleVideo, 0, 0, width, height);
 
             const data = vidCtx.getImageData(0, 0, width, height).data;
             // Data is RGBA[]
@@ -76,7 +79,13 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
             }
 
 
-            window.requestAnimationFrame(run);
+            window.requestAnimationFrame(badAppleRun);
         });
     });
+}
+
+function reset() {
+    badAppleVideo.remove();
+    stopBadApple = true;
+    document.getElementById("UI").style.opacity = 1;
 }
