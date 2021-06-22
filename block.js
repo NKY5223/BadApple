@@ -18,7 +18,7 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
 
     camScale = 2;
 
-    document.getElementById("UI").style.opacity = 0.25;
+    document.getElementById("UI").style.opacity = 0.5;
 
     const vidCanvas = document.createElement("canvas");
     const vidCtx = vidCanvas.getContext("2d");
