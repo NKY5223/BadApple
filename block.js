@@ -16,7 +16,9 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
 
     document.body.appendChild(video);
 
-    hide(document.getElementById("UI"));
+    camScale = 2;
+
+    document.getElementById("UI").style.opacity = 0.25;
 
     const vidCanvas = document.createElement("canvas");
     const vidCtx = vidCanvas.getContext("2d");
@@ -51,33 +53,30 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
             }
         }
 
-        video.addEventListener("play", () => {
-            video.blur();
-            window.requestAnimationFrame(function run() {
-                vidCtx.drawImage(video, 0, 0, width, height);
+        window.requestAnimationFrame(function run() {
+            vidCtx.drawImage(video, 0, 0, width, height);
 
-                const data = vidCtx.getImageData(0, 0, width, height).data;
-                // Data is RGBA[]
-                for (let y = 0, num = 0; y < height; y += pixelSize) {
-                    for (let x = 0; x < width; x += pixelSize, num++) {
-                        let color = 0;
+            const data = vidCtx.getImageData(0, 0, width, height).data;
+            // Data is RGBA[]
+            for (let y = 0, num = 0; y < height; y += pixelSize) {
+                for (let x = 0; x < width; x += pixelSize, num++) {
+                    let color = 0;
 
-                        for (let dy = 0; dy < pixelSize; dy++) {
-                            for (let dx = 0; dx < pixelSize; dx++) {
-                                color += data[((y + dy) * width + x + dx) * 4];
-                            }
+                    for (let dy = 0; dy < pixelSize; dy++) {
+                        for (let dx = 0; dx < pixelSize; dx++) {
+                            color += data[((y + dy) * width + x + dx) * 4];
                         }
-
-                        color /= pixelSize * pixelSize;
-                        blocks[num].color = `rgb(${color}, ${color}, ${color})`;
-                        // console.log(color);
                     }
-                    // break;
+
+                    color /= pixelSize * pixelSize;
+                    blocks[num].color = `rgb(${color}, ${color}, ${color})`;
+                    // console.log(color);
                 }
+                // break;
+            }
 
 
-                window.requestAnimationFrame(run);
-            });
+            window.requestAnimationFrame(run);
         });
     });
 }
