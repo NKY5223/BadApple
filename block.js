@@ -51,7 +51,6 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
                     color: "#000000"
                 });
                 map.block0.push(blocks[blocks.length - 1]);
-                blockCount++;
             }
         }
 
