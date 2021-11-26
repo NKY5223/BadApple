@@ -1,22 +1,19 @@
-let badAppleVideo;
-let stopBadApple = false;
+let blockCount = 0;
 function bad_apple(pixelSize = 5, blockSize = 5) {
-    const blocks = parsedMap.block0 = [];
-
-    badAppleVideo = document.createElement("video");
-    badAppleVideo.src = "badapple.mp4";
-    badAppleVideo.controls = true;
-    badAppleVideo.crossOrigin = "Anonymous";
+    const video = document.createElement("video");
+    video.src = "badapple.mp4";
+    video.controls = true;
+    video.crossOrigin = "Anonymous";
 
     // Styling
-    badAppleVideo.style.position = "absolute";
-    badAppleVideo.style.display = "block";
-    badAppleVideo.style.top = "0px";
-    badAppleVideo.style.left = "0px";
-    badAppleVideo.style.outline = "none";
+    video.style.position = "absolute";
+    video.style.display = "block";
+    video.style.top = "0px";
+    video.style.left = "0px";
+    video.style.outline = "none";
 
 
-    document.body.appendChild(badAppleVideo);
+    document.body.appendChild(video);
 
     camScale = 2;
 
@@ -25,11 +22,11 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
     vidCanvas = document.createElement("canvas");
     const vidCtx = vidCanvas.getContext("2d");
 
-    badAppleVideo.addEventListener("loadeddata", () => {
+    video.addEventListener("loadeddata", () => {
         console.log("Video loaded");
 
-        const width = badAppleVideo.videoWidth;
-        const height = badAppleVideo.videoHeight;
+        const width = video.videoWidth;
+        const height = video.videoHeight;
 
         vidCanvas.width = width;
         vidCanvas.height = height;
@@ -39,9 +36,10 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
         camY = blockSize * height / pixelSize / 2;
         customAlert("Ready");
 
+        let OGlen = map.block0.length;
         for (let y = 0; y * pixelSize < height; y++) {
             for (let x = 0; x * pixelSize < width; x++) {
-                blocks.push({
+                map.block0.push({
                     pos: {
                         x: x * blockSize,
                         y: y * blockSize
@@ -52,40 +50,38 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
                     },
                     color: "#000000"
                 });
+                blockCount++;
             }
         }
 
-        window.requestAnimationFrame(function badAppleRun() {
-            if (stopBadApple) return;
-            vidCtx.drawImage(badAppleVideo, 0, 0, width, height);
+        window.requestAnimationFrame(function run() {
+            vidCtx.drawImage(video, 0, 0, width, height);
 
             const data = vidCtx.getImageData(0, 0, width, height).data;
             // Data is RGBA[]
             for (let y = 0, num = 0; y < height; y += pixelSize) {
                 for (let x = 0; x < width; x += pixelSize, num++) {
-                    let color = 0;
+                    let r = 0;
+                    let g = 0;
+                    let b = 0;
 
                     for (let dy = 0; dy < pixelSize; dy++) {
                         for (let dx = 0; dx < pixelSize; dx++) {
-                            color += data[((y + dy) * width + x + dx) * 4];
+                            r += data[((y + dy) * width + x + dx) * 4];
+                            g += data[((y + dy) * width + x + dx) * 4 + 1];
+                            b += data[((y + dy) * width + x + dx) * 4 + 2];
                         }
                     }
 
-                    color /= pixelSize * pixelSize;
-                    blocks[num].color = `rgb(${color}, ${color}, ${color})`;
-                    // console.log(color);
+                    r /= pixelSize * pixelSize;
+                    g /= pixelSize * pixelSize;
+                    b /= pixelSize * pixelSize;
+                    map.block0[num + OGlen].color = `rgb(${r}, ${g}, ${b})`;
                 }
-                // break;
             }
 
 
-            window.requestAnimationFrame(badAppleRun);
+            window.requestAnimationFrame(run);
         });
     });
-}
-
-function reset() {
-    badAppleVideo.remove();
-    stopBadApple = true;
-    document.getElementById("UI").style.opacity = 1;
 }
