@@ -1,4 +1,3 @@
-let blockCount = 0;
 function bad_apple(pixelSize = 5, blockSize = 5) {
     const video = document.createElement("video");
     video.src = "badapple.mp4";
@@ -35,7 +34,7 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
         camX = blockSize * width / pixelSize / 2;
         camY = blockSize * height / pixelSize / 2;
         customAlert("Ready");
-        
+
         const blocks = [];
 
         for (let y = 0; y * pixelSize < height; y++) {
@@ -61,6 +60,7 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
                 customAlert("Stopped Bad Apple");
                 video.remove();
                 document.getElementById("UI").style.opacity = 1;
+                freeCam = false;
                 return;
             }
             vidCtx.drawImage(video, 0, 0, width, height);

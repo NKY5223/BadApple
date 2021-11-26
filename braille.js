@@ -99,6 +99,7 @@ function bad_apple(ox = 0, oy = 0) {
                 customAlert("Stopped Bad Apple");
                 video.remove();
                 document.getElementById("UI").style.opacity = 1;
+                freeCam = false;
                 return;
             }
             vidCtx.drawImage(video, 0, 0, width, height);
