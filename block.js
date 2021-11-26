@@ -35,11 +35,12 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
         camX = blockSize * width / pixelSize / 2;
         camY = blockSize * height / pixelSize / 2;
         customAlert("Ready");
+        
+        const blocks = [];
 
-        let OGlen = map.block0.length;
         for (let y = 0; y * pixelSize < height; y++) {
             for (let x = 0; x * pixelSize < width; x++) {
-                map.block0.push({
+                blocks.push({
                     pos: {
                         x: x * blockSize,
                         y: y * blockSize
@@ -50,11 +51,18 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
                     },
                     color: "#000000"
                 });
+                map.block0.push(blocks[blocks.length - 1]);
                 blockCount++;
             }
         }
 
         window.requestAnimationFrame(function run() {
+            if (!map.block0.includes(blocks[0])) {
+                customAlert("Stopped Bad Apple");
+                video.remove();
+                document.getElementById("UI").style.opacity = 1;
+                return;
+            }
             vidCtx.drawImage(video, 0, 0, width, height);
 
             const data = vidCtx.getImageData(0, 0, width, height).data;
@@ -76,7 +84,7 @@ function bad_apple(pixelSize = 5, blockSize = 5) {
                     r /= pixelSize * pixelSize;
                     g /= pixelSize * pixelSize;
                     b /= pixelSize * pixelSize;
-                    map.block0[num + OGlen].color = `rgb(${r}, ${g}, ${b})`;
+                    blocks[num].color = `rgb(${r}, ${g}, ${b})`;
                 }
             }
 

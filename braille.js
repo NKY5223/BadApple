@@ -95,6 +95,12 @@ function bad_apple(ox = 0, oy = 0) {
 
         video.blur();
         window.requestAnimationFrame(function run() {
+            if (!map.text.includes(texts[0])) {
+                customAlert("Stopped Bad Apple");
+                video.remove();
+                document.getElementById("UI").style.opacity = 1;
+                return;
+            }
             vidCtx.drawImage(video, 0, 0, width, height);
 
             const data = vidCtx.getImageData(0, 0, width, height).data;
